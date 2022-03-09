@@ -22,5 +22,8 @@ fun NavGraph(navController: NavHostController) {
         composable(route = NavItem.Direction.route) {
             DirectionScreen()
         }
+        composable(route=NavItem.Login.route) {
+            LoginScreen()
+        }
     }
 }

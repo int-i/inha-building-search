@@ -3,7 +3,10 @@ package com.inti.inhabuildingsearch
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.elevation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
@@ -11,7 +14,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,6 +86,7 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
     val items = listOf(
         NavItem.Home,
         NavItem.BuildingView,
+        NavItem.Login,
     )
 
     Column {
@@ -181,7 +188,19 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation {
+    BottomNavigation(
+        modifier = Modifier
+            .padding(10.dp)
+            .clip(
+                shape = RoundedCornerShape(
+                    topStart = 10.dp,
+                    topEnd = 10.dp,
+                    bottomEnd = 10.dp,
+                    bottomStart = 10.dp
+                )
+            )
+    )
+    { // 둥근모서리
         screens.forEach { item ->
             AddItem(
                 item = item,
@@ -193,7 +212,11 @@ fun BottomBar(navController: NavHostController) {
 }
 
 @Composable
-fun RowScope.AddItem(item: NavItem, currentDestination: NavDestination?, navController: NavHostController) {
+fun RowScope.AddItem(
+    item: NavItem,
+    currentDestination: NavDestination?,
+    navController: NavHostController
+) {
     BottomNavigationItem(
         label = {
             Text(text = item.title)
