@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">inha building search</string>
-    <string name="sign_in_welcome_text">Please Log In</string>
+    <string name="sign_in_welcome_text">로그인 해주세요</string>
     <string name="sign_in">Sign In</string>
     <string name="id_hint">사용자 이름 또는 학번</string>
     <string name="password_hint">비밀번호</string>

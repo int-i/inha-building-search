@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,14 +35,25 @@ fun LoginScreen() {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
+        val idState = remember { mutableStateOf(TextFieldValue()) }
+        val passwordState = remember { mutableStateOf(TextFieldValue()) }
+
         Title()
-        Id()
-        Password()
+        Id(idState)
+        Password(passwordState)
         LoginButton()
+
+        val stateList = listOf(
+            idState,
+            passwordState
+        )
+        // TODO: 서버로 각각의 state에 들어있는 value값을 넘김
     }
 }
 
-@Composable fun Title(){
+@Composable
+fun Title() {
     Text(
         text = stringResource(R.string.sign_in_welcome_text),
         fontSize = MaterialTheme.typography.h3.fontSize,
@@ -51,13 +63,14 @@ fun LoginScreen() {
 }
 
 
-@Composable fun Id(){
-    val idState = remember{ mutableStateOf(TextFieldValue()) }
+
+@Composable
+fun Id(idState: MutableState<TextFieldValue>) {
     TextField(
         modifier = Modifier.fillMaxWidth(),
-        value=idState.value,
-        onValueChange={idState.value = it},
-        label = {Text(text = stringResource(R.string.id_hint))},
+        value = idState.value,
+        onValueChange = { idState.value = it },
+        label = { Text(text = stringResource(R.string.id_hint)) },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
@@ -68,35 +81,35 @@ fun LoginScreen() {
     )
 }
 
-@Composable fun Password(){
-    val passwordState = remember{ mutableStateOf(TextFieldValue()) }
-    val showPassword = remember{ mutableStateOf(false) }
+@Composable
+fun Password(passwordState: MutableState<TextFieldValue>) {
+    val showPassword = remember { mutableStateOf(false) }
     TextField(
         modifier = Modifier.fillMaxWidth(),
-        value=passwordState.value,
-        onValueChange={passwordState.value = it},
-        label = {Text(text = stringResource(R.string.password_hint))},
+        value = passwordState.value,
+        onValueChange = { passwordState.value = it },
+        label = { Text(text = stringResource(R.string.password_hint)) },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
         shape = RoundedCornerShape(8.dp),
-        visualTransformation = if(showPassword.value){
+        visualTransformation = if (showPassword.value) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()//패스워드 가림
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
-            if(showPassword.value){
-                IconButton(onClick = {showPassword.value = false}){
+            if (showPassword.value) {
+                IconButton(onClick = { showPassword.value = false }) {
                     Icon(
                         imageVector = Icons.Filled.Visibility,
                         contentDescription = stringResource(R.string.hide_password)
                     )
                 }
-            } else{
-                IconButton(onClick = {showPassword.value = true}){
+            } else {
+                IconButton(onClick = { showPassword.value = true }) {
                     Icon(
                         imageVector = Icons.Filled.VisibilityOff,
                         contentDescription = stringResource(R.string.show_password)
@@ -107,7 +120,8 @@ fun LoginScreen() {
     )
 }
 
-@Composable fun LoginButton(){
+@Composable
+fun LoginButton() {
     Button(
         onClick = { },
         modifier = Modifier.fillMaxWidth(),
@@ -116,7 +130,7 @@ fun LoginScreen() {
             backgroundColor = colorResource(id = R.color.blue_900),
             contentColor = Color.White
         )
-    ){
+    ) {
         Text(
             text = stringResource(R.string.sign_in)
         )
