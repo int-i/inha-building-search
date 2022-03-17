@@ -1,26 +1,35 @@
 package com.inti.inhabuildingsearch
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.ButtonDefaults.elevation
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,8 +57,20 @@ fun MainScreen() {
         // drawer가 열려있는 상태, 닫혀있는 상태를 저장하기 위함
         scaffoldState = scaffoldState,
         // 앱 상단의 Bar를 어떻게 그릴지
-        topBar = { TopBar(scope = scope, scaffoldState = scaffoldState) },
-        bottomBar = { BottomBar(navController = navController) },
+        topBar = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            when (navBackStackEntry?.destination?.route) {
+                NavItem.Splash.route -> {} // 더미 함수
+                else -> TopBar(scope = scope, scaffoldState = scaffoldState)
+            }
+        },
+        bottomBar = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            when (navBackStackEntry?.destination?.route) {
+                NavItem.Splash.route -> {} // 더미 함수
+                else -> BottomBar(navController = navController)
+            }
+        },
         drawerBackgroundColor = colorResource(id = R.color.purple_200),
         // drawer 안에 들어가는 내용
         // 현재 상태를 인자값으로 Drawer 컴포저블 호출
@@ -61,11 +82,15 @@ fun MainScreen() {
     }
 }
 
+
 // MainScreen 컴포저블 안에있는 Scaffold의 topBar 매개변수에 넣을 인자의 람다 본문에서 해당 컴포저블을 호출
 @Composable
-fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
+fun TopBar(
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+) {
     TopAppBar(
-        title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
+        title = { Text("") },
         navigationIcon = {
             IconButton(onClick = {
                 scope.launch {
@@ -75,9 +100,11 @@ fun TopBar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
                 Icon(Icons.Filled.Menu, "")
             }
         },
+
         backgroundColor = colorResource(id = R.color.purple_200),
         contentColor = Color.White
     )
+
 }
 
 @Composable

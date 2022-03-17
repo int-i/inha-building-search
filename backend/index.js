@@ -1,21 +1,27 @@
 import express from "express";
-import api from "./routers/index";
-import axios from "axios";
+import cookieParser from "cookie-parser";
+import api from "./routers/router";
 import http from "http";
 import connectDB from "./db";
 
-import bodyParser from "body-parser";
-
-const app = express(); 
+const app = express();
+const port = 8080;
 
 connectDB();
 
-app.use(express.json()); //req의 body 정보를 읽을 수 있도록 설정, 모듈_json 해석기
-app.use("/api", api); //api 연결
+app.use(express.urlencoded({
+    extended: true
+}));
+app.use(express.json());
+app.use(cookieParser());
+app.use("/api", api)
+
+app.get('/', (req, res) => {
+    res.send('Hello world!');
+});
 
 
-
-const httpPort = 8080;
-http.createServer(app).listen(httpPort, () => {
+http.createServer(app).listen(port, () => {
     console.log("서버 리스닝에 성공했습니다.");
 });
+

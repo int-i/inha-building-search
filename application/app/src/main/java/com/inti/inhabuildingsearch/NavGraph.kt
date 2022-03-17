@@ -11,8 +11,11 @@ fun NavGraph(navController: NavHostController) {
     // startDestination은 시작 지점을 어디로 할건지
     NavHost(
         navController = navController,
-        startDestination = NavItem.Home.route
+        startDestination = NavItem.Splash.route
     ) {
+        composable(route = NavItem.Splash.route) {
+            SplashScreen(navController)
+        }
         composable(route = NavItem.Home.route) {
             HomeScreen()
         }

@@ -1,0 +1,1 @@
+export const mongoURI = "mongodb://yt4307.iptime.org:27017";
