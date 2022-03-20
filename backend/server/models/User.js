@@ -20,6 +20,12 @@ const userSchema = new Schema(
         password: {
             type: String,
             minlength: 5,
+        },
+        token: {
+            type: String,
+        },
+        tokenExp: {
+            type: Number,
         }
     },
     {
@@ -69,7 +75,6 @@ userSchema.statics.findByToken = function (token, cb) {
         });
     });
 }
-
 
 // 다른 파일에서도 이 모델을 쓸 수 있도록
 export default model("User", userSchema);
